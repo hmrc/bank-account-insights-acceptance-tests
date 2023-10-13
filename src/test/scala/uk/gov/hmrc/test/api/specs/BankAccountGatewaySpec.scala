@@ -23,11 +23,11 @@ import uk.gov.hmrc.test.api.models.response.risklist_response_codes.{ACCOUNT_NOT
 import uk.gov.hmrc.test.api.testdata.ApiErrors.UNAUTHORISED
 import uk.gov.hmrc.test.api.testdata.BankAccounts.{RISKY_ACCOUNT, UNKNOWN_ACCOUNT}
 
-class BankAccountGatewaySpec extends BaseSpec with InternalAuthToken {
+class BankAccountGatewaySpec extends BaseSpec {
 
   val bankAccountGatewayUserAgent = "bank-account-gateway"
-  val host: String = TestConfiguration.url("bank-account-insights-proxy")
-  val checkAccountURL: String = s"$host/${Endpoints.CHECK_INSIGHTS}"
+  val host: String                = TestConfiguration.url("bank-account-insights-proxy")
+  val checkAccountURL: String     = s"$host/${Endpoints.CHECK_INSIGHTS}"
 
   Feature("Check the bank account gateway API") {
 
@@ -64,8 +64,12 @@ class BankAccountGatewaySpec extends BaseSpec with InternalAuthToken {
       assertThat(actual.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
     }
 
-    Scenario("Get risking information for a bank account on the risk list using multiple User-Agent values in one header") {
-      Given("I want to see if we hold any risking information for a bank account using multiple User-Agent values in one header")
+    Scenario(
+      "Get risking information for a bank account on the risk list using multiple User-Agent values in one header"
+    ) {
+      Given(
+        "I want to see if we hold any risking information for a bank account using multiple User-Agent values in one header"
+      )
 
       When("I use the check insights API via bank account gateway to see what information we hold")
       val actual = bankAccountCheckHelper.parseValidBankAccountCheckResponseFromGatewayByUserAgents(RISKY_ACCOUNT)
