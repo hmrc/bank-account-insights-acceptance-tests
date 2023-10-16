@@ -1,0 +1,36 @@
+{
+  "add": [
+    {
+      "reason": "Weak Authentication",
+      "contextId": 1,
+      "url": "http:\/\/localhost:9907\/check\/insights",
+      "ruleId": 10105,
+      "urlIsRegex": "true",
+      "newLevel": 0
+    },
+    {
+      "reason": "Weak Authentication",
+      "contextId": 1,
+      "url": "http:\/\/localhost:9907\/ipp",
+      "ruleId": 10105,
+      "urlIsRegex": "true",
+      "newLevel": 0
+    },
+    {
+      "reason": "Weak Authentication",
+      "contextId": 1,
+      "url": "http:\/\/localhost:9865\/check\/insights",
+      "ruleId": 10105,
+      "urlIsRegex": "true",
+      "newLevel": 0
+    },
+    {
+      "reason": "Weak Authentication",
+      "contextId": 1,
+      "url": "http:\/\/localhost:9865\/ipp",
+      "ruleId": 10105,
+      "urlIsRegex": "true",
+      "newLevel": 0
+    }
+  ]
+}
