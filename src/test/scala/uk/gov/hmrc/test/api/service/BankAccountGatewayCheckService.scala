@@ -29,8 +29,19 @@ import scala.concurrent.duration._
 class BankAccountGatewayCheckService extends HttpClient {
   val host: String            = TestConfiguration.url("bank-account-gateway")
   val checkAccountURL: String = s"$host/${Endpoints.CHECK_INSIGHTS}"
+  val openApiUrl: String = s"$host/api/conf/1.0/application.yaml"
   val userAgentOne = "bank-account-gateway"
   val userAgentTwo = "allowed-test-hmrc-service"
+
+  def getOpenApiSpec(): StandaloneWSRequest#Self#Response =
+    Await.result(
+      get(
+        openApiUrl,
+        ("Content-Type", "application/json"),
+        ("User-Agent", "allowed-test-hmrc-service")
+      ),
+      10.seconds
+    )
 
   def postBankAccountGatewayCheck(
     accountDetails: InsightsRequest
