@@ -32,9 +32,9 @@ class BankAccountIppDirectSpec extends BaseSpec with WireMockTrait {
   val expectedRiskyAccountAttribute         = "paye_ref"
   val expectedUnKnownAccountAttribute       = "ct_utr"
   val expectedRiskyAccountAttributeValues   =
-    "{\"value\": \"AB1324578721\",\"numOfOccurrences\": 4,\"lastSeen\": \"2023-01-10T12:35:00.830828\"}"
+    "{\"value\": \"AB1324578721\",\"numOfOccurrences\": 4,\"lastSeen\": \"2023-01-10T12:35:00.830\"}"
   val expectedUnKnownAccountAttributeValues =
-    "{\"value\": \"AB1324578722\",\"numOfOccurrences\": 3,\"lastSeen\": \"2023-01-10T12:35:00.404784\"}"
+    "{\"value\": \"AB1324578722\",\"numOfOccurrences\": 3,\"lastSeen\": \"2023-01-10T12:35:00.404\"}"
 
   val expectedRiskyAccountRelationshipsString =
     s"""
