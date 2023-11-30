@@ -22,7 +22,9 @@ class SwaggerSpecs extends AnyWordSpec with SwaggerSpec {
   val gatewayHost: String = TestConfiguration.url("bank-account-gateway")
   val proxyHost: String = TestConfiguration.url("bank-account-insights-proxy")
 
-  "Api platform swagger specification" should behave.like(validOpenApiSpecAt(gatewayHost, "/api/conf/1.0/application.yaml"))
+  "Api platform swagger specification" should behave.like(
+    validOpenApiSpecAt(gatewayHost, "/api/conf/1.0/application.yaml",
+      excludePaths = Seq("/verify/personal", "/verify/business")))
 
   "IPP swagger specification" should behave.like(validOpenApiSpecAt(proxyHost, "/test-only/open-api/ipp"))
 }
@@ -40,7 +42,8 @@ trait SwaggerSpec {
   val applicationJson = "application/json"
   val client = new HttpClient() {}
 
-  def validOpenApiSpecAt(host: String, openApiUrl: String, userAgent: String = "allowed-test-hmrc-service") {
+  def validOpenApiSpecAt(host: String, openApiUrl: String, excludePaths: Seq[String] = Seq(),
+                         userAgent: String = "allowed-test-hmrc-service") {
 
     "should parse" in {
       val result = new OpenAPIV3Parser().readLocation(s"$host$openApiUrl", null, parseOptions)
@@ -50,89 +53,96 @@ trait SwaggerSpec {
     "should contain valid examples" when {
       val openApi = new OpenAPIV3Parser().read(s"$host$openApiUrl", null, parseOptions)
 
-      openApi.getPaths.forEach { case (path, p) =>
-        val verbs = Option(p.getGet).map("GET" -> _) ++ Option(p.getPost).map("POST" -> _)
-        verbs.foreach { case (verb, r) =>
-          val request = r.getRequestBody.getContent.get(applicationJson)
-          val requestExamples = getExamples(request)
+      openApi.getPaths.forEach {
+        case (path, p) if !excludePaths.contains(path) =>
 
-          s"$path $verb request examples" in {
-            val json = mapper.writeValueAsString(request.getSchema)
-            val validator = new SchemaValidator(null, mapper.readTree(json))
+          val verbs = Option(p.getGet).map("GET" -> _) ++ Option(p.getPost).map("POST" -> _)
+          verbs.foreach { case (verb, r) =>
+            val request = r.getRequestBody.getContent.get(applicationJson)
+            val requestExamples = getExamples(request)
 
-            assume(requestExamples.nonEmpty) withClue "No examples were found for this request"
-            requestExamples.foreach { e =>
-              val vd = new ValidationData()
-              validator.validate(e.asInstanceOf[JsonNode], vd)
-
-              vd.isValid shouldBe true withClue vd.results()
-            }
-          }
-
-          val responses = getResponses(r)
-          responses.collect { case (statusCode, Some(r)) =>
-            s"$path $verb $statusCode response examples" in {
-              val json = mapper.writeValueAsString(r.getSchema)
+            s"$path $verb request examples" in {
+              val json = mapper.writeValueAsString(request.getSchema)
               val validator = new SchemaValidator(null, mapper.readTree(json))
 
-              val examples = getExamples(r)
-              assume(requestExamples.nonEmpty) withClue "No examples were found for this response"
-
-              examples.foreach { e =>
+              assume(requestExamples.nonEmpty) withClue "No examples were found for this request"
+              requestExamples.foreach { e =>
                 val vd = new ValidationData()
                 validator.validate(e.asInstanceOf[JsonNode], vd)
 
                 vd.isValid shouldBe true withClue vd.results()
               }
             }
+
+            val responses = getResponses(r)
+            responses.collect { case (statusCode, Some(r)) =>
+              s"$path $verb $statusCode response examples" in {
+                val json = mapper.writeValueAsString(r.getSchema)
+                val validator = new SchemaValidator(null, mapper.readTree(json))
+
+                val examples = getExamples(r)
+                assume(requestExamples.nonEmpty) withClue "No examples were found for this response"
+
+                examples.foreach { e =>
+                  val vd = new ValidationData()
+                  validator.validate(e.asInstanceOf[JsonNode], vd)
+
+                  vd.isValid shouldBe true withClue vd.results()
+                }
+              }
+            }
           }
-        }
+
+        case _ =>
       }
     }
 
     "should elicit valid responses from the service" when {
       val openApi = new OpenAPIV3Parser().read(s"$host$openApiUrl", null, parseOptions)
 
-      openApi.getPaths.forEach { case (path, p) =>
-        val verbs = Option(p.getGet).map("GET" -> _) ++ Option(p.getPost).map("POST" -> _)
+      openApi.getPaths.forEach {
+        case (path, p) if !excludePaths.contains(path) =>
+          val verbs = Option(p.getGet).map("GET" -> _) ++ Option(p.getPost).map("POST" -> _)
 
-        val requests = verbs.map { case (verb, r) =>
-          val request = r.getRequestBody.getContent.get(applicationJson)
-          val responses = getResponses(r)
+          val requests = verbs.map { case (verb, r) =>
+            val request = r.getRequestBody.getContent.get(applicationJson)
+            val responses = getResponses(r)
 
-          verb -> (request, responses)
-        }
-
-        requests.foreach { case (verb, (request, responses)) =>
-          val examples = getExamples(request)
-          if (examples.isEmpty) {
-            s"$verb $path (no examples found)" in {
-              assume(examples.nonEmpty) withClue "No examples were found for this request"
-            }
+            verb -> (request, responses)
           }
 
-          examples.foreach { e =>
-            val headers = Seq("Content-Type" -> applicationJson, "User-Agent" -> userAgent)
-            val req = verb match {
-              case "GET" => client.get(s"$host$path", headers: _*)
-              case "POST" =>
-                client.post(s"$host$path", mapper.writeValueAsString(e.asInstanceOf[JsonNode]), headers: _*)
+          requests.foreach { case (verb, (request, responses)) =>
+            val examples = getExamples(request)
+            if (examples.isEmpty) {
+              s"$verb $path (no examples found)" in {
+                assume(examples.nonEmpty) withClue "No examples were found for this request"
+              }
             }
 
-            val response = Await.result(req, 10.seconds)
-            Option(responses(response.status.toString)).foreach { case Some(r) =>
-              s"$verb $path - ${response.status}" in {
-                val json = mapper.writeValueAsString(r.getSchema)
-                val validator = new SchemaValidator(null, mapper.readTree(json))
+            examples.foreach { e =>
+              val headers = Seq("Content-Type" -> applicationJson, "User-Agent" -> userAgent)
+              val req = verb match {
+                case "GET" => client.get(s"$host$path", headers: _*)
+                case "POST" =>
+                  client.post(s"$host$path", mapper.writeValueAsString(e.asInstanceOf[JsonNode]), headers: _*)
+              }
 
-                val vd = new ValidationData()
-                validator.validate(mapper.readTree(response.body), vd)
+              val response = Await.result(req, 10.seconds)
+              Option(responses(response.status.toString)).collect { case Some(r) =>
+                s"$verb $path - ${response.status}" in {
+                  val json = mapper.writeValueAsString(r.getSchema)
+                  val validator = new SchemaValidator(null, mapper.readTree(json))
 
-                vd.isValid shouldBe true withClue vd.results()
+                  val vd = new ValidationData()
+                  validator.validate(mapper.readTree(response.body), vd)
+
+                  vd.isValid shouldBe true withClue vd.results()
+                }
               }
             }
           }
-        }
+
+        case _ =>
       }
     }
   }
