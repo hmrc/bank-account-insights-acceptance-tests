@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,16 +51,20 @@ package response {
 
     final case class Insights(risk: Risk, relationships: List[Attribute])
 
-    final case class BankAccountIppResponse(sortCode: String, accountNumber: String, correlationId: String,
-                              insights: Insights)
+    final case class BankAccountIppResponse(
+      sortCode: String,
+      accountNumber: String,
+      correlationId: String,
+      insights: Insights
+    )
 
     object BankAccountIppResponse {
       object Implicits {
         implicit val ippResponseComponentValueFormat: Format[AttributeValue] = Json.format[AttributeValue]
-        implicit val ippResponseComponentFormat: Format[Attribute] = Json.format[Attribute]
-        implicit val ippResponseInsightsRiskFormat: Format[Risk] = Json.format[Risk]
-        implicit val ippResponseInsightsFormat: Format[Insights] = Json.format[Insights]
-        implicit val ippResponseFormat: Format[BankAccountIppResponse] = Json.format[BankAccountIppResponse]
+        implicit val ippResponseComponentFormat: Format[Attribute]           = Json.format[Attribute]
+        implicit val ippResponseInsightsRiskFormat: Format[Risk]             = Json.format[Risk]
+        implicit val ippResponseInsightsFormat: Format[Insights]             = Json.format[Insights]
+        implicit val ippResponseFormat: Format[BankAccountIppResponse]       = Json.format[BankAccountIppResponse]
       }
     }
   }

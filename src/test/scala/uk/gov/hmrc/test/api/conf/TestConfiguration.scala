@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,14 +25,13 @@ object TestConfiguration {
   val defaultConfig: Config = config.getConfig("local")
   val envConfig: Config     = config.getConfig(env).withFallback(defaultConfig)
 
-  def url(service: String): String = {
+  def url(service: String): String =
     env match {
       case "local" => s"$environmentHost:${servicePort(service)}"
       case _       => s"${envConfig.getString(s"services.host")}"
     }
-  }
-  def userAgent: String           = envConfig.getString("user-agents.test-http-client")
-  def expectedServiceName: String = envConfig.getString("user-agents.service-name")
+  def userAgent: String            = envConfig.getString("user-agents.test-http-client")
+  def expectedServiceName: String  = envConfig.getString("user-agents.service-name")
 
   def environmentHost: String = envConfig.getString("services.host")
 

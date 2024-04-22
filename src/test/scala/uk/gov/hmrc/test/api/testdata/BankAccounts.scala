@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 HM Revenue & Customs
+ * Copyright 2024 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package uk.gov.hmrc.test.api.testdata
 import uk.gov.hmrc.test.api.models.request.InsightsRequest
 
 object BankAccounts {
-  val UNKNOWN_ACCOUNT: InsightsRequest =
+  val UNKNOWN_ACCOUNT: InsightsRequest          =
     InsightsRequest(sortCode = "404784", accountNumber = "70872490")
-  val RISKY_ACCOUNT: InsightsRequest   =
+  val RISKY_ACCOUNT: InsightsRequest            =
     InsightsRequest(sortCode = "830828", accountNumber = "31857475")
   val RISKY_ACCOUNT_NOT_IN_IPP: InsightsRequest =
     InsightsRequest(sortCode = "393358", accountNumber = "13902323")
