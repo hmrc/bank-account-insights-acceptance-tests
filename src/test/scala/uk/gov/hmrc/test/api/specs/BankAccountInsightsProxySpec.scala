@@ -33,7 +33,8 @@ class BankAccountInsightsProxySpec extends BaseSpec {
       Given("I want to see if we hold any risk information for a bank account")
 
       When("I use the check insights API to see what information we hold")
-      val actual = bankAccountCheckHelper.parseValidBankAccountCheckResponseFromInsightsProxy(checkAccountURL, UNKNOWN_ACCOUNT)
+      val actual =
+        bankAccountCheckHelper.parseValidBankAccountCheckResponseFromInsightsProxy(checkAccountURL, UNKNOWN_ACCOUNT)
 
       Then("I am given the relevant risk information")
       assertThat(actual.riskScore).isEqualTo(0)
@@ -44,7 +45,8 @@ class BankAccountInsightsProxySpec extends BaseSpec {
       Given("I want to see if we hold any risk information for a bank account")
 
       When("I use the check insights API to see what information we hold")
-      val actual = bankAccountCheckHelper.parseValidBankAccountCheckResponseFromInsightsProxy(checkAccountURL, RISKY_ACCOUNT)
+      val actual =
+        bankAccountCheckHelper.parseValidBankAccountCheckResponseFromInsightsProxy(checkAccountURL, RISKY_ACCOUNT)
 
       Then("I am given the relevant risk information")
       assertThat(actual.riskScore).isEqualTo(100)

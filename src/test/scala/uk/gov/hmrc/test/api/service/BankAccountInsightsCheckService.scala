@@ -27,7 +27,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 
 class BankAccountInsightsCheckService extends HttpClient {
-  val hostInsightsDirect: String = TestConfiguration.url("bank-account-insights")
+  val hostInsightsDirect: String    = TestConfiguration.url("bank-account-insights")
   val checkAccountDirectURL: String = s"$hostInsightsDirect/${Endpoints.CHECK_INSIGHTS}"
 
   def postInsightsCheck(
@@ -54,7 +54,8 @@ class BankAccountInsightsCheckService extends HttpClient {
         ("Content-Type", "application/json"),
         ("User-Agent", "allowed-test-hmrc-service"),
         ("Authorization", "Basic YmFuay1hY2NvdW50LWluc2lnaHRzLXByb3h5OmxvY2FsLXRlc3QtdG9rZW4=")
-      ), 10.seconds
+      ),
+      10.seconds
     )
 
   def postInsightsInvalidCheck(

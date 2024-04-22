@@ -28,21 +28,22 @@ import scala.concurrent.duration._
 
 class BankAccountIppService extends HttpClient {
 
-  val hostInsightsDirect: String = TestConfiguration.url("bank-account-insights")
+  val hostInsightsDirect: String    = TestConfiguration.url("bank-account-insights")
   val checkAccountDirectURL: String = s"$hostInsightsDirect/${Endpoints.IPP}"
-  val authHeader = "Basic YmFuay1hY2NvdW50LWluc2lnaHRzLXByb3h5OmxvY2FsLXRlc3QtdG9rZW4="
+  val authHeader                    = "Basic YmFuay1hY2NvdW50LWluc2lnaHRzLXByb3h5OmxvY2FsLXRlc3QtdG9rZW4="
 
   def postIppCheck(
     checkAccountURL: String,
     accountDetails: InsightsRequest
   ): StandaloneWSRequest#Self#Response =
     Await.result(
-        post(
-          checkAccountURL,
-          bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
-          ("Content-Type", "application/json"),
-          ("User-Agent", "allowed-test-hmrc-service")
-        ), 10.seconds
+      post(
+        checkAccountURL,
+        bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
+        ("Content-Type", "application/json"),
+        ("User-Agent", "allowed-test-hmrc-service")
+      ),
+      10.seconds
     )
 
   def postIppCheckDirect(

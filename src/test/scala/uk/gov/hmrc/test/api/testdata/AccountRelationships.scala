@@ -34,7 +34,7 @@ object AccountRelationships {
       |      }
       |""".stripMargin
 
-  val UNKNOWN_ACCOUNT_RELATIONSHIPS: String   =
+  val UNKNOWN_ACCOUNT_RELATIONSHIPS: String =
     """
       |{
       |        "attribute": "ct_utr",

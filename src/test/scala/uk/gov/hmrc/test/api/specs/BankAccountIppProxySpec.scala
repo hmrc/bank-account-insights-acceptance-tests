@@ -28,8 +28,8 @@ import uk.gov.hmrc.test.api.testdata.BankAccounts.{RISKY_ACCOUNT, UNKNOWN_ACCOUN
 
 class BankAccountIppProxySpec extends BaseSpec {
 
-  val host: String = TestConfiguration.url("bank-account-insights-proxy")
-  val checkAccountURL: String = s"$host/${Endpoints.IPP}"
+  val host: String                     = TestConfiguration.url("bank-account-insights-proxy")
+  val checkAccountURL: String          = s"$host/${Endpoints.IPP}"
   val checkAccountURLWithRoute: String = s"$host/${Endpoints.IPP_WITH_ROUTE}"
 
   val expectedRiskyAccountRelationships   = Seq(Json.parse(RISKY_ACCOUNT_RELATIONSHIPS).as[Attribute])
@@ -63,8 +63,12 @@ class BankAccountIppProxySpec extends BaseSpec {
       assertThat(actual.insights.relationships).isEqualTo(expectedUnknownAccountRelationships)
     }
 
-    Scenario("Get IPP and risk information for a bank account on the risk list using \"bank-account-insights/ipp\" route") {
-      Given("I want to see if we hold any risk and IPP information for a bank account using \"bank-account-insights/ipp\" route")
+    Scenario(
+      "Get IPP and risk information for a bank account on the risk list using \"bank-account-insights/ipp\" route"
+    ) {
+      Given(
+        "I want to see if we hold any risk and IPP information for a bank account using \"bank-account-insights/ipp\" route"
+      )
 
       When("I use the IPP API to see what information we hold")
       val actual =
@@ -76,8 +80,12 @@ class BankAccountIppProxySpec extends BaseSpec {
       assertThat(actual.insights.relationships).isEqualTo(expectedRiskyAccountRelationships)
     }
 
-    Scenario("Get IPP information for an UNKNOWN bank account which exists in IPP using \"bank-account-insights/ipp\" route") {
-      Given("I want to see if we hold any risk information for a bank account using \"bank-account-insights/ipp\" route")
+    Scenario(
+      "Get IPP information for an UNKNOWN bank account which exists in IPP using \"bank-account-insights/ipp\" route"
+    ) {
+      Given(
+        "I want to see if we hold any risk information for a bank account using \"bank-account-insights/ipp\" route"
+      )
 
       When("I want to see if we hold any IPP information for an unknown bank account")
       val actual =

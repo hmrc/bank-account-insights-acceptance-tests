@@ -29,7 +29,7 @@ import uk.gov.hmrc.test.api.service.{BankAccountGatewayCheckService, BankAccount
 class AccountCheckHelper {
 
   val bankAccountInsightsCheckAPI: BankAccountInsightsCheckService = new BankAccountInsightsCheckService
-  val bankAccountIppCheckAPI: BankAccountIppService = new BankAccountIppService
+  val bankAccountIppCheckAPI: BankAccountIppService                = new BankAccountIppService
   val bankAccountGatewayCheckAPI: BankAccountGatewayCheckService   = new BankAccountGatewayCheckService
   def parseValidBankAccountCheckResponseFromInsightsProxy(
     checkAccountURL: String,

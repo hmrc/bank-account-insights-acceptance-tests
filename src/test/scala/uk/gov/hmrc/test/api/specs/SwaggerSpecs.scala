@@ -36,11 +36,15 @@ import scala.jdk.StreamConverters._
 
 class SwaggerSpecs extends AnyWordSpec with SwaggerSpec {
   val gatewayHost: String = TestConfiguration.url("bank-account-gateway")
-  val proxyHost: String = TestConfiguration.url("bank-account-insights-proxy")
+  val proxyHost: String   = TestConfiguration.url("bank-account-insights-proxy")
 
   "Api platform swagger specification" should behave.like(
-    validOpenApiSpecAt(gatewayHost, "/api/conf/1.0/application.yaml",
-      excludePaths = Seq("/verify/personal", "/verify/business")))
+    validOpenApiSpecAt(
+      gatewayHost,
+      "/api/conf/1.0/application.yaml",
+      excludePaths = Seq("/verify/personal", "/verify/business")
+    )
+  )
 
   "IPP swagger specification" should behave.like(validOpenApiSpecAt(proxyHost, "/test-only/open-api/ipp"))
 }
@@ -56,10 +60,14 @@ trait SwaggerSpec {
   mapper.setSerializationInclusion(Include.NON_NULL);
 
   val applicationJson = "application/json"
-  val client = new HttpClient() {}
+  val client          = new HttpClient() {}
 
-  def validOpenApiSpecAt(host: String, openApiUrl: String, excludePaths: Seq[String] = Seq(),
-                         userAgent: String = "allowed-test-hmrc-service") {
+  def validOpenApiSpecAt(
+    host: String,
+    openApiUrl: String,
+    excludePaths: Seq[String] = Seq(),
+    userAgent: String = "allowed-test-hmrc-service"
+  ) {
 
     "should parse" in {
       val result = new OpenAPIV3Parser().readLocation(s"$host$openApiUrl", null, parseOptions)
@@ -71,14 +79,13 @@ trait SwaggerSpec {
 
       openApi.getPaths.forEach {
         case (path, p) if !excludePaths.contains(path) =>
-
           val verbs = Option(p.getGet).map("GET" -> _) ++ Option(p.getPost).map("POST" -> _)
           verbs.foreach { case (verb, r) =>
-            val request = r.getRequestBody.getContent.get(applicationJson)
+            val request         = r.getRequestBody.getContent.get(applicationJson)
             val requestExamples = getExamples(request)
 
             s"$path $verb request examples" in {
-              val json = mapper.writeValueAsString(request.getSchema)
+              val json      = mapper.writeValueAsString(request.getSchema)
               val validator = new SchemaValidator(null, mapper.readTree(json))
 
               assume(requestExamples.nonEmpty) withClue "No examples were found for this request"
@@ -93,7 +100,7 @@ trait SwaggerSpec {
             val responses = getResponses(r)
             responses.collect { case (statusCode, Some(r)) =>
               s"$path $verb $statusCode response examples" in {
-                val json = mapper.writeValueAsString(r.getSchema)
+                val json      = mapper.writeValueAsString(r.getSchema)
                 val validator = new SchemaValidator(null, mapper.readTree(json))
 
                 val examples = getExamples(r)
@@ -121,7 +128,7 @@ trait SwaggerSpec {
           val verbs = Option(p.getGet).map("GET" -> _) ++ Option(p.getPost).map("POST" -> _)
 
           val requests = verbs.map { case (verb, r) =>
-            val request = r.getRequestBody.getContent.get(applicationJson)
+            val request   = r.getRequestBody.getContent.get(applicationJson)
             val responses = getResponses(r)
 
             verb -> (request, responses)
@@ -137,8 +144,8 @@ trait SwaggerSpec {
 
             examples.foreach { e =>
               val headers = Seq("Content-Type" -> applicationJson, "User-Agent" -> userAgent)
-              val req = verb match {
-                case "GET" => client.get(s"$host$path", headers: _*)
+              val req     = verb match {
+                case "GET"  => client.get(s"$host$path", headers: _*)
                 case "POST" =>
                   client.post(s"$host$path", mapper.writeValueAsString(e.asInstanceOf[JsonNode]), headers: _*)
               }
@@ -146,7 +153,7 @@ trait SwaggerSpec {
               val response = Await.result(req, 10.seconds)
               Option(responses(response.status.toString)).collect { case Some(r) =>
                 s"$verb $path - ${response.status}" in {
-                  val json = mapper.writeValueAsString(r.getSchema)
+                  val json      = mapper.writeValueAsString(r.getSchema)
                   val validator = new SchemaValidator(null, mapper.readTree(json))
 
                   val vd = new ValidationData()
@@ -163,17 +170,21 @@ trait SwaggerSpec {
     }
   }
 
-  private def getResponses(r: Operation) = {
-    r.getResponses.entrySet().stream().map(e => {
-      e.getKey -> Option(e.getValue.getContent).map(_.get(applicationJson))
-    }).toScala(Map)
-  }
+  private def getResponses(r: Operation) =
+    r.getResponses
+      .entrySet()
+      .stream()
+      .map { e =>
+        e.getKey -> Option(e.getValue.getContent).map(_.get(applicationJson))
+      }
+      .toScala(Map)
 
   def getExamples(request: MediaType) = {
-    val requestExample = Option(request.getExample)
-    val requestExamples = Option(request.getExamples).map(_.values().stream().toScala(Seq)).getOrElse(Seq()).map(_.getValue)
-    val schemaExample = Option(request.getSchema.getExample)
-    val schemaExamples = Option(request.getSchema.getExamples).map(_.stream().toScala(Seq)).getOrElse(Seq())
+    val requestExample  = Option(request.getExample)
+    val requestExamples =
+      Option(request.getExamples).map(_.values().stream().toScala(Seq)).getOrElse(Seq()).map(_.getValue)
+    val schemaExample   = Option(request.getSchema.getExample)
+    val schemaExamples  = Option(request.getSchema.getExamples).map(_.stream().toScala(Seq)).getOrElse(Seq())
 
     requestExample ++ requestExamples ++ schemaExample ++ schemaExamples
   }
