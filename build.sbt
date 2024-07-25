@@ -1,13 +1,12 @@
 import sbt.Test
 
 lazy val testSuite = (project in file("."))
-  .enablePlugins(SbtAutoBuildPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     organization := "uk.gov.hmrc",
     name := "bank-account-insights-acceptance-tests",
     version := "0.1.0",
-    scalaVersion := "2.13.10",
+    scalaVersion := "2.13.12",
     libraryDependencies ++= Dependencies.test,
     Test / parallelExecution := false,
     Test / testOptions := Seq(
