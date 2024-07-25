@@ -26,17 +26,17 @@ trait InternalAuthToken extends BeforeAndAfterAll {
 
   this: Suite =>
 
-  val internalAuthHelper: InternalAuthHelper = new InternalAuthHelper()
-  val ninoGatewayInternalAuthToken: Token    = Token("1234")
-  var internalAuthToken: Option[AuthToken]   = None
+  val internalAuthHelper: InternalAuthHelper     = new InternalAuthHelper()
+  val bankAccountGatewayInternalAuthToken: Token = Token("1234")
+  var internalAuthToken: Option[AuthToken]       = None
 
   def createDummyAuthToken(tokenValue: String): Option[AuthToken] =
     Some(AuthToken(Token(tokenValue), Instant.now().plus(Duration.ofDays(5))))
   override def beforeAll(): Unit = {
     super.beforeAll()
     internalAuthToken = Some(internalAuthHelper.postConfigureInternalAuthToken())
-    internalAuthHelper.deleteToken(ninoGatewayInternalAuthToken.value)
-    internalAuthHelper.postConfigureInternalAuthToken(ninoGatewayInternalAuthToken)
+    internalAuthHelper.deleteToken(bankAccountGatewayInternalAuthToken.value)
+    internalAuthHelper.postConfigureInternalAuthToken(bankAccountGatewayInternalAuthToken)
   }
 
   override def afterAll(): Unit = {

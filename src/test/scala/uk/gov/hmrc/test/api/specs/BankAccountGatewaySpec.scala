@@ -90,10 +90,12 @@ class BankAccountGatewaySpec extends BaseSpec {
       assertThat(actual.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
     }
 
-    Scenario("Try to get risking information for a NINO on the risk list without a User-Agent or originatorId header") {
-      Given("I want to see if we hold any risking information for a NINO")
+    Scenario(
+      "Try to get risking information for a bank account on the risk list without a User-Agent or originatorId header"
+    ) {
+      Given("I want to see if we hold any risking information for a bank account")
 
-      When("I use the NINO check insights API to see what information we hold")
+      When("I use the bank account check insights API to see what information we hold")
       val actual = bankAccountCheckHelper.parseInvalidResponseFromBankAccountGateway(RISKY_ACCOUNT)
 
       Then("My query is rejected")
@@ -101,10 +103,10 @@ class BankAccountGatewaySpec extends BaseSpec {
       assertThat(actual.description).contains(UNAUTHORISED)
     }
 
-    Scenario("Try to get risking information for a NINO on the risk list by using invalid originatorId") {
-      Given("I want to see if we hold any risking information for a NINO")
+    Scenario("Try to get risking information for a bank account on the risk list by using invalid originatorId") {
+      Given("I want to see if we hold any risking information for a bank account")
 
-      When("I use the NINO check insights API to see what information we hold")
+      When("I use the bank account check insights API to see what information we hold")
       val actual = bankAccountCheckHelper.parseInvalidResponseFromBankAccountGatewayByInvalidHeader(RISKY_ACCOUNT)
 
       Then("My query is rejected")
