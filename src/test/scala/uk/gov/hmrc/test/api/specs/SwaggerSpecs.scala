@@ -67,7 +67,7 @@ trait SwaggerSpec {
     openApiUrl: String,
     excludePaths: Seq[String] = Seq(),
     userAgent: String = "allowed-test-hmrc-service"
-  ) {
+  ): Unit = {
 
     "should parse" in {
       val result = new OpenAPIV3Parser().readLocation(s"$host$openApiUrl", null, parseOptions)
@@ -98,12 +98,12 @@ trait SwaggerSpec {
             }
 
             val responses = getResponses(r)
-            responses.collect { case (statusCode, Some(r)) =>
+            responses.collect { case (statusCode, Some(mediaType)) =>
               s"$path $verb $statusCode response examples" in {
-                val json      = mapper.writeValueAsString(r.getSchema)
+                val json      = mapper.writeValueAsString(mediaType.getSchema)
                 val validator = new SchemaValidator(null, mapper.readTree(json))
 
-                val examples = getExamples(r)
+                val examples = getExamples(mediaType)
                 assume(requestExamples.nonEmpty) withClue "No examples were found for this response"
 
                 examples.foreach { e =>
