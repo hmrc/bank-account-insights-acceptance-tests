@@ -16,8 +16,6 @@
 
 package uk.gov.hmrc.test.api.testdata
 
-import uk.gov.hmrc.test.api.models.request.InsightsRequest
-
 object AccountRelationships {
   val RISKY_ACCOUNT_RELATIONSHIPS: String =
     """

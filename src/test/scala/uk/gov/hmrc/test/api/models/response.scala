@@ -16,10 +16,9 @@
 
 package uk.gov.hmrc.test.api.models
 
-import java.time.LocalDateTime
-import play.api.libs.functional.syntax._
-import play.api.libs.json.Reads._
 import play.api.libs.json._
+
+import java.time.LocalDateTime
 
 /** riskScore: 0-100 <br/> reason:
   * ACCOUNT_NOT_ON_WATCH_LIST|ACCOUNT_ON_WATCH_LIST
