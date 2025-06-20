@@ -1,7 +1,7 @@
 
 # bank-account-insights-acceptance-tests
 
-This is a placeholder README.md for a new repository
+This repository contains acceptance tests for the Bank Account Insights service.
 
 ### License
 
