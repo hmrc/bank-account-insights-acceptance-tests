@@ -30,9 +30,9 @@ class BankAccountIppService extends HttpClientHelper {
   val authHeader                    = "Basic YmFuay1hY2NvdW50LWluc2lnaHRzLXByb3h5OmxvY2FsLXRlc3QtdG9rZW4="
 
   def postIppCheck(
-                    checkAccountURL: String,
-                    accountDetails: InsightsRequest
-                  ): StandaloneWSResponse =
+    checkAccountURL: String,
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
       checkAccountURL,
       bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
@@ -41,8 +41,8 @@ class BankAccountIppService extends HttpClientHelper {
     )
 
   def postIppCheckDirect(
-                          accountDetails: InsightsRequest
-                        ): StandaloneWSResponse =
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
       checkAccountDirectURL,
       bankAccountInsightsRequestWrites.writes(accountDetails).toString(),

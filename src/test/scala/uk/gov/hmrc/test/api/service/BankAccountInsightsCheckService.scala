@@ -28,9 +28,9 @@ class BankAccountInsightsCheckService extends HttpClientHelper {
   val checkAccountDirectURL: String = s"$hostInsightsDirect/${Endpoints.CHECK_INSIGHTS}"
 
   def postInsightsCheck(
-                         checkAccountURL: String,
-                         accountDetails: InsightsRequest
-                       ): StandaloneWSResponse =
+    checkAccountURL: String,
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
       checkAccountURL,
       bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
@@ -39,8 +39,8 @@ class BankAccountInsightsCheckService extends HttpClientHelper {
     )
 
   def postInsightsCheckDirect(
-                               accountDetails: InsightsRequest
-                             ): StandaloneWSResponse =
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
       checkAccountDirectURL,
       bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
@@ -50,9 +50,9 @@ class BankAccountInsightsCheckService extends HttpClientHelper {
     )
 
   def postInsightsInvalidCheck(
-                                checkAccountURL: String,
-                                accountDetails: InsightsRequest
-                              ): StandaloneWSResponse =
+    checkAccountURL: String,
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
       checkAccountURL,
       bankAccountInsightsRequestWrites.writes(accountDetails).toString(),

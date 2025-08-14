@@ -143,7 +143,7 @@ trait SwaggerSpec {
             }
 
             examples.foreach { e =>
-              val headers = Seq("Content-Type" -> applicationJson, "User-Agent" -> userAgent)
+              val headers  = Seq("Content-Type" -> applicationJson, "User-Agent" -> userAgent)
               val response = verb match {
                 case "GET"  => client.get(s"$host$path", headers: _*)
                 case "POST" =>

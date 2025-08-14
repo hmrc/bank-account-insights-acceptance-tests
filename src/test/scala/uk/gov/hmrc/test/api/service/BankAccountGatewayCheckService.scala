@@ -31,62 +31,62 @@ class BankAccountGatewayCheckService extends HttpClientHelper {
   val userAgentTwo            = "allowed-test-hmrc-service"
 
   def postBankAccountGatewayCheck(
-                                   accountDetails: InsightsRequest
-                                 ): StandaloneWSResponse =
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
-        checkAccountURL,
-        bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
-        ("Content-Type", "application/json"),
-        ("User-Agent", "allowed-test-hmrc-service")
-      )
+      checkAccountURL,
+      bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
+      ("Content-Type", "application/json"),
+      ("User-Agent", "allowed-test-hmrc-service")
+    )
 
   def postBankAccountGatewayCheckByMultipleUserAgentHeaders(
-                                                             accountDetails: InsightsRequest
-                                                           ): StandaloneWSResponse =
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
-        checkAccountURL,
-        bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
-        ("Content-Type", "application/json"),
-        ("User-Agent", s"$userAgentOne"),
-        ("User-Agent", s"$userAgentTwo")
-      )
+      checkAccountURL,
+      bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
+      ("Content-Type", "application/json"),
+      ("User-Agent", s"$userAgentOne"),
+      ("User-Agent", s"$userAgentTwo")
+    )
 
   def postBankAccountGatewayCheckByMultipleUserAgentValuesInOneHeader(
-                                                                       accountDetails: InsightsRequest
-                                                                     ): StandaloneWSResponse =
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
-        checkAccountURL,
-        bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
-        ("Content-Type", "application/json"),
-        ("User-Agent", s"$userAgentOne,$userAgentTwo")
-      )
+      checkAccountURL,
+      bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
+      ("Content-Type", "application/json"),
+      ("User-Agent", s"$userAgentOne,$userAgentTwo")
+    )
 
   def postBankAccountGatewayCheckByByOriginatorIdHeader(
-                                                         accountDetails: InsightsRequest
-                                                       ): StandaloneWSResponse =
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
-        checkAccountURL,
-        bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
-        ("Content-Type", "application/json"),
-        ("OriginatorId", s"$userAgentOne")
-      )
+      checkAccountURL,
+      bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
+      ("Content-Type", "application/json"),
+      ("OriginatorId", s"$userAgentOne")
+    )
 
   def postInvalidBankAccountGatewayCheck(
-                                          accountDetails: InsightsRequest
-                                        ): StandaloneWSResponse =
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
-        checkAccountURL,
-        bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
-        ("Content-Type", "application/json")
-      )
+      checkAccountURL,
+      bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
+      ("Content-Type", "application/json")
+    )
 
   def postInvalidBankAccountGatewayCheckByInvalidHeader(
-                                                         accountDetails: InsightsRequest
-                                                       ): StandaloneWSResponse =
+    accountDetails: InsightsRequest
+  ): StandaloneWSResponse =
     post(
-        checkAccountURL,
-        bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
-        ("Content-Type", "application/json"),
-        ("OriginatorId", "Invalid OriginatorID")
-      )
+      checkAccountURL,
+      bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
+      ("Content-Type", "application/json"),
+      ("OriginatorId", "Invalid OriginatorID")
+    )
 }

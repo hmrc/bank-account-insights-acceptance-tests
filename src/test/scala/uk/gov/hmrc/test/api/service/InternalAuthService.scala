@@ -31,9 +31,9 @@ class InternalAuthService extends HttpClientHelper {
   val internalAuth: String = TestConfiguration.url("internal-auth")
 
   def postAuthRequest(
-                       tokenDetails: TestOnlyAddTokenRequest,
-                       host: String = internalAuth
-                     ): StandaloneWSResponse =
+    tokenDetails: TestOnlyAddTokenRequest,
+    host: String = internalAuth
+  ): StandaloneWSResponse =
     post(
       s"$host/${Endpoints.INTERNAL_AUTH}",
       Json.toJson(tokenDetails)(TestOnlyAddTokenRequest.format).toString(),
