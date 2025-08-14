@@ -27,7 +27,7 @@ import org.openapi4j.schema.validator.v3.SchemaValidator
 import org.scalatest.AppendedClues.convertToClueful
 import org.scalatest.matchers.should.Matchers._
 import org.scalatest.wordspec.AnyWordSpec
-import uk.gov.hmrc.test.api.client.HttpClient
+import uk.gov.hmrc.test.api.client.HttpClientHelper
 import uk.gov.hmrc.test.api.conf.TestConfiguration
 
 import scala.concurrent.Await
@@ -60,7 +60,7 @@ trait SwaggerSpec {
   mapper.setSerializationInclusion(Include.NON_NULL);
 
   val applicationJson = "application/json"
-  val client          = new HttpClient() {}
+  val client          = new HttpClientHelper() {}
 
   def validOpenApiSpecAt(
     host: String,
@@ -144,13 +144,12 @@ trait SwaggerSpec {
 
             examples.foreach { e =>
               val headers = Seq("Content-Type" -> applicationJson, "User-Agent" -> userAgent)
-              val req     = verb match {
+              val response = verb match {
                 case "GET"  => client.get(s"$host$path", headers: _*)
                 case "POST" =>
                   client.post(s"$host$path", mapper.writeValueAsString(e.asInstanceOf[JsonNode]), headers: _*)
               }
 
-              val response = Await.result(req, 10.seconds)
               Option(responses(response.status.toString)).collect { case Some(r) =>
                 s"$verb $path - ${response.status}" in {
                   val json      = mapper.writeValueAsString(r.getSchema)

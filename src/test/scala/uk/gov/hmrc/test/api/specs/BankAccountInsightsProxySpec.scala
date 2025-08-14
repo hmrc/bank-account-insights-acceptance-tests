@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.test.api.specs
 
-import org.assertj.core.api.Assertions.assertThat
 import uk.gov.hmrc.test.api.conf.TestConfiguration
 import uk.gov.hmrc.test.api.helpers.Endpoints
 import uk.gov.hmrc.test.api.models.response.risklist_response_codes.{ACCOUNT_NOT_ON_WATCH_LIST, ACCOUNT_ON_WATCH_LIST}
@@ -37,8 +36,8 @@ class BankAccountInsightsProxySpec extends BaseSpec {
         bankAccountCheckHelper.parseValidBankAccountCheckResponseFromInsightsProxy(checkAccountURL, UNKNOWN_ACCOUNT)
 
       Then("I am given the relevant risk information")
-      assertThat(actual.riskScore).isEqualTo(0)
-      assertThat(actual.reason).isEqualTo(ACCOUNT_NOT_ON_WATCH_LIST)
+      assert(actual.riskScore == 0)
+      assert(actual.reason == ACCOUNT_NOT_ON_WATCH_LIST)
     }
 
     Scenario("Get risk information for a bank account on the risk list using \"check/insights\" route") {
@@ -49,8 +48,8 @@ class BankAccountInsightsProxySpec extends BaseSpec {
         bankAccountCheckHelper.parseValidBankAccountCheckResponseFromInsightsProxy(checkAccountURL, RISKY_ACCOUNT)
 
       Then("I am given the relevant risk information")
-      assertThat(actual.riskScore).isEqualTo(100)
-      assertThat(actual.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
+      assert(actual.riskScore == 100)
+      assert(actual.reason == ACCOUNT_ON_WATCH_LIST)
     }
 
     Scenario(
@@ -63,8 +62,8 @@ class BankAccountInsightsProxySpec extends BaseSpec {
         bankAccountCheckHelper.parseValidBankAccountCheckResponseFromInsightsProxy(checkAccountURL, UNKNOWN_ACCOUNT)
 
       Then("I am given the relevant risk information")
-      assertThat(actual.riskScore).isEqualTo(0)
-      assertThat(actual.reason).isEqualTo(ACCOUNT_NOT_ON_WATCH_LIST)
+      assert(actual.riskScore == 0)
+      assert(actual.reason == ACCOUNT_NOT_ON_WATCH_LIST)
     }
 
     Scenario(
@@ -77,8 +76,8 @@ class BankAccountInsightsProxySpec extends BaseSpec {
         bankAccountCheckHelper.parseValidBankAccountCheckResponseFromInsightsProxy(checkAccountURL, RISKY_ACCOUNT)
 
       Then("I am given the relevant risk information")
-      assertThat(actual.riskScore).isEqualTo(100)
-      assertThat(actual.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
+      assert(actual.riskScore == 100)
+      assert(actual.reason == ACCOUNT_ON_WATCH_LIST)
     }
   }
 }

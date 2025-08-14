@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.test.api.specs
 
-import org.assertj.core.api.Assertions.assertThat
 import uk.gov.hmrc.test.api.conf.TestConfiguration
 import uk.gov.hmrc.test.api.helpers.Endpoints
 import uk.gov.hmrc.test.api.models.response.risklist_response_codes.{ACCOUNT_NOT_ON_WATCH_LIST, ACCOUNT_ON_WATCH_LIST}
@@ -38,8 +37,8 @@ class BankAccountGatewaySpec extends BaseSpec {
       val actual = bankAccountCheckHelper.parseValidBankAccountCheckResponseFromGateway(UNKNOWN_ACCOUNT)
 
       Then("I am given the relevant risking information")
-      assertThat(actual.riskScore).isEqualTo(0)
-      assertThat(actual.reason).isEqualTo(ACCOUNT_NOT_ON_WATCH_LIST)
+      assert(actual.riskScore == 0)
+      assert(actual.reason == ACCOUNT_NOT_ON_WATCH_LIST)
     }
 
     Scenario("Get risking information for a bank account on the risk list using a single User-Agent header") {
@@ -49,8 +48,8 @@ class BankAccountGatewaySpec extends BaseSpec {
       val actual = bankAccountCheckHelper.parseValidBankAccountCheckResponseFromGateway(RISKY_ACCOUNT)
 
       Then("I am given the relevant risking information")
-      assertThat(actual.riskScore).isEqualTo(100)
-      assertThat(actual.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
+      assert(actual.riskScore == 100)
+      assert(actual.reason == ACCOUNT_ON_WATCH_LIST)
     }
 
     Scenario("Get risking information for a bank account on the risk list using multiple User-Agent headers") {
@@ -60,8 +59,8 @@ class BankAccountGatewaySpec extends BaseSpec {
       val actual = bankAccountCheckHelper.parseValidBankAccountCheckResponseFromGatewayByUserAgents(RISKY_ACCOUNT)
 
       Then("I am given the relevant risking information")
-      assertThat(actual.riskScore).isEqualTo(100)
-      assertThat(actual.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
+      assert(actual.riskScore == 100)
+      assert(actual.reason == ACCOUNT_ON_WATCH_LIST)
     }
 
     Scenario(
@@ -75,8 +74,8 @@ class BankAccountGatewaySpec extends BaseSpec {
       val actual = bankAccountCheckHelper.parseValidBankAccountCheckResponseFromGatewayByUserAgents(RISKY_ACCOUNT)
 
       Then("I am given the relevant risking information")
-      assertThat(actual.riskScore).isEqualTo(100)
-      assertThat(actual.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
+      assert(actual.riskScore == 100)
+      assert(actual.reason == ACCOUNT_ON_WATCH_LIST)
     }
 
     Scenario("Get risking information for a bank account on the risk list using a single OriginatorId header") {
@@ -86,8 +85,8 @@ class BankAccountGatewaySpec extends BaseSpec {
       val actual = bankAccountCheckHelper.parseValidBankAccountCheckResponseFromGatewayByOriginatorId(RISKY_ACCOUNT)
 
       Then("I am given the relevant risking information")
-      assertThat(actual.riskScore).isEqualTo(100)
-      assertThat(actual.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
+      assert(actual.riskScore == 100)
+      assert(actual.reason == ACCOUNT_ON_WATCH_LIST)
     }
 
     Scenario(
@@ -99,8 +98,8 @@ class BankAccountGatewaySpec extends BaseSpec {
       val actual = bankAccountCheckHelper.parseInvalidResponseFromBankAccountGateway(RISKY_ACCOUNT)
 
       Then("My query is rejected")
-      assertThat(actual.code).isEqualTo(403)
-      assertThat(actual.description).contains(UNAUTHORISED)
+      assert(actual.code == 403)
+      assert(actual.description.contains(UNAUTHORISED))
     }
 
     Scenario("Try to get risking information for a bank account on the risk list by using invalid originatorId") {
@@ -110,8 +109,8 @@ class BankAccountGatewaySpec extends BaseSpec {
       val actual = bankAccountCheckHelper.parseInvalidResponseFromBankAccountGatewayByInvalidHeader(RISKY_ACCOUNT)
 
       Then("My query is rejected")
-      assertThat(actual.code).isEqualTo(403)
-      assertThat(actual.description).contains(UNAUTHORISED)
+      assert(actual.code == 403)
+      assert(actual.description.contains(UNAUTHORISED))
     }
   }
 }

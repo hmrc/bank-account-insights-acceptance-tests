@@ -16,108 +16,77 @@
 
 package uk.gov.hmrc.test.api.service
 
-import play.api.libs.ws.StandaloneWSRequest
-import uk.gov.hmrc.test.api.models.request.InsightsRequest
-import uk.gov.hmrc.test.api.models.request.InsightsRequest.implicits.bankAccountInsightsRequestWrites
-import uk.gov.hmrc.test.api.client.HttpClient
+import play.api.libs.ws.StandaloneWSResponse
+import uk.gov.hmrc.test.api.client.HttpClientHelper
 import uk.gov.hmrc.test.api.conf.TestConfiguration
 import uk.gov.hmrc.test.api.helpers.Endpoints
+import uk.gov.hmrc.test.api.models.request.InsightsRequest
+import uk.gov.hmrc.test.api.models.request.InsightsRequest.implicits.bankAccountInsightsRequestWrites
 
-import scala.concurrent.Await
-import scala.concurrent.duration._
-
-class BankAccountGatewayCheckService extends HttpClient {
+class BankAccountGatewayCheckService extends HttpClientHelper {
   val host: String            = TestConfiguration.url("bank-account-gateway")
   val checkAccountURL: String = s"$host/${Endpoints.CHECK_INSIGHTS}"
   val openApiUrl: String      = s"$host/api/conf/1.0/application.yaml"
   val userAgentOne            = "bank-account-gateway"
   val userAgentTwo            = "allowed-test-hmrc-service"
 
-  def getOpenApiSpec(): StandaloneWSRequest#Self#Response =
-    Await.result(
-      get(
-        openApiUrl,
-        ("Content-Type", "application/json"),
-        ("User-Agent", "allowed-test-hmrc-service")
-      ),
-      10.seconds
-    )
-
   def postBankAccountGatewayCheck(
-    accountDetails: InsightsRequest
-  ): StandaloneWSRequest#Self#Response =
-    Await.result(
-      post(
+                                   accountDetails: InsightsRequest
+                                 ): StandaloneWSResponse =
+    post(
         checkAccountURL,
         bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
         ("Content-Type", "application/json"),
         ("User-Agent", "allowed-test-hmrc-service")
-      ),
-      10.seconds
-    )
+      )
 
   def postBankAccountGatewayCheckByMultipleUserAgentHeaders(
-    accountDetails: InsightsRequest
-  ): StandaloneWSRequest#Self#Response =
-    Await.result(
-      post(
+                                                             accountDetails: InsightsRequest
+                                                           ): StandaloneWSResponse =
+    post(
         checkAccountURL,
         bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
         ("Content-Type", "application/json"),
         ("User-Agent", s"$userAgentOne"),
         ("User-Agent", s"$userAgentTwo")
-      ),
-      10.seconds
-    )
+      )
 
   def postBankAccountGatewayCheckByMultipleUserAgentValuesInOneHeader(
-    accountDetails: InsightsRequest
-  ): StandaloneWSRequest#Self#Response =
-    Await.result(
-      post(
+                                                                       accountDetails: InsightsRequest
+                                                                     ): StandaloneWSResponse =
+    post(
         checkAccountURL,
         bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
         ("Content-Type", "application/json"),
         ("User-Agent", s"$userAgentOne,$userAgentTwo")
-      ),
-      10.seconds
-    )
+      )
 
   def postBankAccountGatewayCheckByByOriginatorIdHeader(
-    accountDetails: InsightsRequest
-  ): StandaloneWSRequest#Self#Response =
-    Await.result(
-      post(
+                                                         accountDetails: InsightsRequest
+                                                       ): StandaloneWSResponse =
+    post(
         checkAccountURL,
         bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
         ("Content-Type", "application/json"),
         ("OriginatorId", s"$userAgentOne")
-      ),
-      10.seconds
-    )
+      )
 
   def postInvalidBankAccountGatewayCheck(
-    accountDetails: InsightsRequest
-  ): StandaloneWSRequest#Self#Response =
-    Await.result(
-      post(
+                                          accountDetails: InsightsRequest
+                                        ): StandaloneWSResponse =
+    post(
         checkAccountURL,
         bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
         ("Content-Type", "application/json")
-      ),
-      10.seconds
-    )
+      )
 
   def postInvalidBankAccountGatewayCheckByInvalidHeader(
-    accountDetails: InsightsRequest
-  ): StandaloneWSRequest#Self#Response =
-    Await.result(
-      post(
+                                                         accountDetails: InsightsRequest
+                                                       ): StandaloneWSResponse =
+    post(
         checkAccountURL,
         bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
         ("Content-Type", "application/json"),
         ("OriginatorId", "Invalid OriginatorID")
-      ),
-      10.seconds
-    )
+      )
 }

@@ -17,7 +17,7 @@
 package uk.gov.hmrc.test.api.helpers
 
 import play.api.libs.json.Json
-import play.api.libs.ws.StandaloneWSRequest
+import play.api.libs.ws.{StandaloneWSRequest, StandaloneWSResponse}
 import uk.gov.hmrc.test.api.models._
 import uk.gov.hmrc.test.api.service.InternalAuthService
 
@@ -31,7 +31,7 @@ class InternalAuthHelper {
     val tokenRequest: TestOnlyAddTokenRequest =
       new TestOnlyAddTokenRequest(Some(desiredToken), "object-store", Set(permission))
 
-    val internalAuthRequestResponse: StandaloneWSRequest#Self#Response =
+    val internalAuthRequestResponse: StandaloneWSResponse =
       internalAuthAPI.postAuthRequest(tokenRequest)
     Json.parse(internalAuthRequestResponse.body).as(AuthToken.format)
   }

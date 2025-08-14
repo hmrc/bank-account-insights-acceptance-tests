@@ -17,7 +17,7 @@
 package uk.gov.hmrc.test.api.helpers
 
 import play.api.libs.json.Json
-import play.api.libs.ws.StandaloneWSRequest
+import play.api.libs.ws.{StandaloneWSRequest, StandaloneWSResponse}
 import uk.gov.hmrc.test.api.models.request.InsightsRequest
 import uk.gov.hmrc.test.api.models.response.BankAccountInsightsResponse
 import uk.gov.hmrc.test.api.models.response.BankAccountInsightsResponse.implicits.bankAccountInsightsResponseFormat
@@ -35,7 +35,7 @@ class AccountCheckHelper {
     checkAccountURL: String,
     accountDetails: InsightsRequest
   ): BankAccountInsightsResponse = {
-    val authServiceRequestResponse: StandaloneWSRequest#Self#Response =
+    val authServiceRequestResponse: StandaloneWSResponse =
       bankAccountInsightsCheckAPI.postInsightsCheck(checkAccountURL, accountDetails)
     Json.parse(authServiceRequestResponse.body).as[BankAccountInsightsResponse]
   }
@@ -43,7 +43,7 @@ class AccountCheckHelper {
   def parseValidBankAccountCheckResponseFromInsightsDirect(
     accountDetails: InsightsRequest
   ): BankAccountInsightsResponse = {
-    val authServiceRequestResponse: StandaloneWSRequest#Self#Response =
+    val authServiceRequestResponse: StandaloneWSResponse =
       bankAccountInsightsCheckAPI.postInsightsCheckDirect(accountDetails)
     Json.parse(authServiceRequestResponse.body).as[BankAccountInsightsResponse]
   }
@@ -51,7 +51,7 @@ class AccountCheckHelper {
   def parseValidBankAccountResponseFromIpp(
     accountDetails: InsightsRequest
   ): BankAccountIppResponse = {
-    val authServiceRequestResponse: StandaloneWSRequest#Self#Response =
+    val authServiceRequestResponse: StandaloneWSResponse =
       bankAccountIppCheckAPI.postIppCheckDirect(accountDetails)
     Json.parse(authServiceRequestResponse.body).as[BankAccountIppResponse]
   }
@@ -60,7 +60,7 @@ class AccountCheckHelper {
     checkAccountURL: String,
     accountDetails: InsightsRequest
   ): BankAccountIppResponse = {
-    val authServiceRequestResponse: StandaloneWSRequest#Self#Response =
+    val authServiceRequestResponse: StandaloneWSResponse =
       bankAccountIppCheckAPI.postIppCheck(checkAccountURL, accountDetails)
     Json.parse(authServiceRequestResponse.body).as[BankAccountIppResponse]
   }
@@ -68,7 +68,7 @@ class AccountCheckHelper {
   def parseInvalidResponseFromBankAccountGateway(
     accountDetails: InsightsRequest
   ): BadRequest = {
-    val authServiceRequestResponse: StandaloneWSRequest#Self#Response =
+    val authServiceRequestResponse: StandaloneWSResponse =
       bankAccountGatewayCheckAPI.postInvalidBankAccountGatewayCheck(accountDetails)
     Json.parse(authServiceRequestResponse.body).as[BadRequest]
   }
@@ -76,7 +76,7 @@ class AccountCheckHelper {
   def parseInvalidResponseFromBankAccountGatewayByInvalidHeader(
     accountDetails: InsightsRequest
   ): BadRequest = {
-    val authServiceRequestResponse: StandaloneWSRequest#Self#Response =
+    val authServiceRequestResponse: StandaloneWSResponse =
       bankAccountGatewayCheckAPI.postInvalidBankAccountGatewayCheckByInvalidHeader(accountDetails)
     Json.parse(authServiceRequestResponse.body).as[BadRequest]
   }
@@ -84,7 +84,7 @@ class AccountCheckHelper {
   def parseValidBankAccountCheckResponseFromGateway(
     accountDetails: InsightsRequest
   ): BankAccountInsightsResponse = {
-    val authServiceRequestResponse: StandaloneWSRequest#Self#Response =
+    val authServiceRequestResponse: StandaloneWSResponse =
       bankAccountGatewayCheckAPI.postBankAccountGatewayCheck(accountDetails)
     Json.parse(authServiceRequestResponse.body).as[BankAccountInsightsResponse]
   }
@@ -92,7 +92,7 @@ class AccountCheckHelper {
   def parseValidBankAccountCheckResponseFromGatewayByUserAgents(
     accountDetails: InsightsRequest
   ): BankAccountInsightsResponse = {
-    val authServiceRequestResponse: StandaloneWSRequest#Self#Response =
+    val authServiceRequestResponse: StandaloneWSResponse =
       bankAccountGatewayCheckAPI.postBankAccountGatewayCheckByMultipleUserAgentHeaders(accountDetails)
     Json.parse(authServiceRequestResponse.body).as[BankAccountInsightsResponse]
   }
@@ -100,7 +100,7 @@ class AccountCheckHelper {
   def parseValidBankAccountCheckResponseFromGatewayByOriginatorId(
     accountDetails: InsightsRequest
   ): BankAccountInsightsResponse = {
-    val authServiceRequestResponse: StandaloneWSRequest#Self#Response =
+    val authServiceRequestResponse: StandaloneWSResponse =
       bankAccountGatewayCheckAPI.postBankAccountGatewayCheckByByOriginatorIdHeader(accountDetails)
     Json.parse(authServiceRequestResponse.body).as[BankAccountInsightsResponse]
   }
@@ -108,7 +108,7 @@ class AccountCheckHelper {
   def parseValidBankAccountCheckResponseFromGatewayByMultipleUserAgentValuesInOneHeader(
     accountDetails: InsightsRequest
   ): BankAccountInsightsResponse = {
-    val authServiceRequestResponse: StandaloneWSRequest#Self#Response =
+    val authServiceRequestResponse: StandaloneWSResponse =
       bankAccountGatewayCheckAPI.postBankAccountGatewayCheckByMultipleUserAgentValuesInOneHeader(accountDetails)
     Json.parse(authServiceRequestResponse.body).as[BankAccountInsightsResponse]
   }
