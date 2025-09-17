@@ -16,17 +16,14 @@
 
 package uk.gov.hmrc.test.api.service
 
-import play.api.libs.ws.StandaloneWSRequest
-import uk.gov.hmrc.test.api.client.HttpClient
+import play.api.libs.ws.StandaloneWSResponse
+import uk.gov.hmrc.test.api.client.HttpClientHelper
 import uk.gov.hmrc.test.api.conf.TestConfiguration
 import uk.gov.hmrc.test.api.helpers.Endpoints
 import uk.gov.hmrc.test.api.models.request.InsightsRequest
 import uk.gov.hmrc.test.api.models.request.InsightsRequest.implicits.bankAccountInsightsRequestWrites
 
-import scala.concurrent.Await
-import scala.concurrent.duration._
-
-class BankAccountIppService extends HttpClient {
+class BankAccountIppService extends HttpClientHelper {
 
   val hostInsightsDirect: String    = TestConfiguration.url("bank-account-insights")
   val checkAccountDirectURL: String = s"$hostInsightsDirect/${Endpoints.IPP}"
@@ -35,28 +32,22 @@ class BankAccountIppService extends HttpClient {
   def postIppCheck(
     checkAccountURL: String,
     accountDetails: InsightsRequest
-  ): StandaloneWSRequest#Self#Response =
-    Await.result(
-      post(
-        checkAccountURL,
-        bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
-        ("Content-Type", "application/json"),
-        ("User-Agent", "allowed-test-hmrc-service")
-      ),
-      10.seconds
+  ): StandaloneWSResponse =
+    post(
+      checkAccountURL,
+      bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
+      ("Content-Type", "application/json"),
+      ("User-Agent", "allowed-test-hmrc-service")
     )
 
   def postIppCheckDirect(
     accountDetails: InsightsRequest
-  ): StandaloneWSRequest#Self#Response =
-    Await.result(
-      post(
-        checkAccountDirectURL,
-        bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
-        ("Content-Type", "application/json"),
-        ("User-Agent", "allowed-test-hmrc-service"),
-        ("Authorization", authHeader)
-      ),
-      10.seconds
+  ): StandaloneWSResponse =
+    post(
+      checkAccountDirectURL,
+      bankAccountInsightsRequestWrites.writes(accountDetails).toString(),
+      ("Content-Type", "application/json"),
+      ("User-Agent", "allowed-test-hmrc-service"),
+      ("Authorization", authHeader)
     )
 }

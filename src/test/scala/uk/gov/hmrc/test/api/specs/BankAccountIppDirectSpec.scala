@@ -17,7 +17,6 @@
 package uk.gov.hmrc.test.api.specs
 
 import com.github.tomakehurst.wiremock.client.WireMock.{matchingJsonPath, postRequestedFor, urlEqualTo, verify}
-import org.assertj.core.api.Assertions.assertThat
 import play.api.libs.json.Json
 import uk.gov.hmrc.test.api.conf.TestConfiguration
 import uk.gov.hmrc.test.api.models.response.BankAccountIpp.{Attribute, BankAccountIppResponse}
@@ -70,9 +69,9 @@ class BankAccountIppDirectSpec extends BaseSpec with WireMockTrait {
       val actual = bankAccountCheckHelper.parseValidBankAccountResponseFromIpp(RISKY_ACCOUNT)
 
       Then("I am given the relevant risk and IPP information")
-      assertThat(actual.insights.risk.riskScore).isEqualTo(100)
-      assertThat(actual.insights.risk.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
-      assertThat(actual.insights.relationships).isEqualTo(expectedRiskyAccountRelationships)
+      assert(actual.insights.risk.riskScore == 100)
+      assert(actual.insights.risk.reason == ACCOUNT_ON_WATCH_LIST)
+      assert(actual.insights.relationships == expectedRiskyAccountRelationships)
 
       verifyIppAudit(
         actual,
@@ -91,9 +90,9 @@ class BankAccountIppDirectSpec extends BaseSpec with WireMockTrait {
       val actual = bankAccountCheckHelper.parseValidBankAccountResponseFromIpp(UNKNOWN_ACCOUNT)
 
       Then("I am given the relevant IPP and risk information")
-      assertThat(actual.insights.risk.riskScore).isEqualTo(0)
-      assertThat(actual.insights.risk.reason).isEqualTo(ACCOUNT_NOT_ON_WATCH_LIST)
-      assertThat(actual.insights.relationships).isEqualTo(expectedUnknownAccountRelationships)
+      assert(actual.insights.risk.riskScore == 0)
+      assert(actual.insights.risk.reason == ACCOUNT_NOT_ON_WATCH_LIST)
+      assert(actual.insights.relationships == expectedUnknownAccountRelationships)
 
       verifyIppAudit(
         actual,
@@ -114,9 +113,9 @@ class BankAccountIppDirectSpec extends BaseSpec with WireMockTrait {
       val actual = bankAccountCheckHelper.parseValidBankAccountResponseFromIpp(RISKY_ACCOUNT_NOT_IN_IPP)
 
       Then("I am given the relevant risk information only")
-      assertThat(actual.insights.risk.riskScore).isEqualTo(100)
-      assertThat(actual.insights.risk.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
-      assertThat(actual.insights.relationships).isEqualTo(Seq.empty)
+      assert(actual.insights.risk.riskScore == 100)
+      assert(actual.insights.risk.reason == ACCOUNT_ON_WATCH_LIST)
+      assert(actual.insights.relationships == Seq.empty)
     }
   }
 

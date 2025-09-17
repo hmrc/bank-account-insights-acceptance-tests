@@ -16,7 +16,6 @@
 
 package uk.gov.hmrc.test.api.specs
 
-import org.assertj.core.api.Assertions.assertThat
 import play.api.libs.json.Json
 import uk.gov.hmrc.test.api.conf.TestConfiguration
 import uk.gov.hmrc.test.api.helpers.Endpoints
@@ -45,9 +44,9 @@ class BankAccountIppProxySpec extends BaseSpec {
         bankAccountCheckHelper.parseValidBankAccountCheckResponseFromIppProxy(checkAccountURL, RISKY_ACCOUNT)
 
       Then("I am given the relevant risk and IPP information")
-      assertThat(actual.insights.risk.riskScore).isEqualTo(100)
-      assertThat(actual.insights.risk.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
-      assertThat(actual.insights.relationships).isEqualTo(expectedRiskyAccountRelationships)
+      assert(actual.insights.risk.riskScore == 100)
+      assert(actual.insights.risk.reason == ACCOUNT_ON_WATCH_LIST)
+      assert(actual.insights.relationships == expectedRiskyAccountRelationships)
     }
 
     Scenario("Get IPP information for an UNKNOWN bank account which exists in IPP using ipp route") {
@@ -58,9 +57,9 @@ class BankAccountIppProxySpec extends BaseSpec {
         bankAccountCheckHelper.parseValidBankAccountCheckResponseFromIppProxy(checkAccountURL, UNKNOWN_ACCOUNT)
 
       Then("I am given the relevant risk and IPP information")
-      assertThat(actual.insights.risk.riskScore).isEqualTo(0)
-      assertThat(actual.insights.risk.reason).isEqualTo(ACCOUNT_NOT_ON_WATCH_LIST)
-      assertThat(actual.insights.relationships).isEqualTo(expectedUnknownAccountRelationships)
+      assert(actual.insights.risk.riskScore == 0)
+      assert(actual.insights.risk.reason == ACCOUNT_NOT_ON_WATCH_LIST)
+      assert(actual.insights.relationships == expectedUnknownAccountRelationships)
     }
 
     Scenario(
@@ -75,9 +74,9 @@ class BankAccountIppProxySpec extends BaseSpec {
         bankAccountCheckHelper.parseValidBankAccountCheckResponseFromIppProxy(checkAccountURLWithRoute, RISKY_ACCOUNT)
 
       Then("I am given the relevant risk and IPP information")
-      assertThat(actual.insights.risk.riskScore).isEqualTo(100)
-      assertThat(actual.insights.risk.reason).isEqualTo(ACCOUNT_ON_WATCH_LIST)
-      assertThat(actual.insights.relationships).isEqualTo(expectedRiskyAccountRelationships)
+      assert(actual.insights.risk.riskScore == 100)
+      assert(actual.insights.risk.reason == ACCOUNT_ON_WATCH_LIST)
+      assert(actual.insights.relationships == expectedRiskyAccountRelationships)
     }
 
     Scenario(
@@ -92,9 +91,9 @@ class BankAccountIppProxySpec extends BaseSpec {
         bankAccountCheckHelper.parseValidBankAccountCheckResponseFromIppProxy(checkAccountURLWithRoute, UNKNOWN_ACCOUNT)
 
       Then("I am given the relevant risk and IPP information")
-      assertThat(actual.insights.risk.riskScore).isEqualTo(0)
-      assertThat(actual.insights.risk.reason).isEqualTo(ACCOUNT_NOT_ON_WATCH_LIST)
-      assertThat(actual.insights.relationships).isEqualTo(expectedUnknownAccountRelationships)
+      assert(actual.insights.risk.riskScore == 0)
+      assert(actual.insights.risk.reason == ACCOUNT_NOT_ON_WATCH_LIST)
+      assert(actual.insights.relationships == expectedUnknownAccountRelationships)
     }
   }
 }
