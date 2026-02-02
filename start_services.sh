@@ -12,7 +12,6 @@ sm2 --start BANK_ACCOUNT_INSIGHTS_PROXY BANK_ACCOUNT_GATEWAY BANK_ACCOUNT_INSIGH
         "-Dauditing.consumer.baseUri.port=6001",
         "-Dauditing.consumer.baseUri.host=localhost",
         "-Dauditing.enabled=true",
-        "-Dmicroservice.risk-lists.database.use-canned-data=true",
-        "-Dmicroservice.bank-account-insights.database.use-canned-data=true"
+        "-Ddb.default.use-canned-data=true"
       ]
     }'
