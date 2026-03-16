@@ -17,13 +17,13 @@
 package uk.gov.hmrc.test.api.helpers
 
 import play.api.libs.json.Json
-import play.api.libs.ws.{StandaloneWSRequest, StandaloneWSResponse}
+import play.api.libs.ws.StandaloneWSResponse
+import uk.gov.hmrc.test.api.models.BadRequest
 import uk.gov.hmrc.test.api.models.request.InsightsRequest
 import uk.gov.hmrc.test.api.models.response.BankAccountInsightsResponse
 import uk.gov.hmrc.test.api.models.response.BankAccountInsightsResponse.implicits.bankAccountInsightsResponseFormat
 import uk.gov.hmrc.test.api.models.response.BankAccountIpp.BankAccountIppResponse
-import uk.gov.hmrc.test.api.models.response.BankAccountIpp.BankAccountIppResponse.Implicits._
-import uk.gov.hmrc.test.api.models.BadRequest
+import uk.gov.hmrc.test.api.models.response.BankAccountIpp.BankAccountIppResponse.Implicits.*
 import uk.gov.hmrc.test.api.service.{BankAccountGatewayCheckService, BankAccountInsightsCheckService, BankAccountIppService}
 
 class AccountCheckHelper {

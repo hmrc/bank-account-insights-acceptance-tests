@@ -18,7 +18,7 @@ package uk.gov.hmrc.test.api.models
 
 import play.api.libs.json.{Format, JsResult, JsString, JsValue}
 
-case class ResourceType private[models] (value: String) extends AnyVal
+case class ResourceType(value: String) extends AnyVal
 
 object ResourceType {
   val wildcard: ResourceType = ResourceType("*")

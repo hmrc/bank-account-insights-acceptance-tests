@@ -16,21 +16,18 @@
 
 package uk.gov.hmrc.test.api.db
 
-import cats.effect.{ContextShift, IO, Timer}
+import cats.effect.IO
 import doobie._
 import doobie.implicits._
 import doobie.postgres.{PFCM, PHC}
 import uk.gov.hmrc.test.api.db.DBHelper._
+import cats.effect.unsafe.implicits.global
 
 import java.io.File
 import java.net.URI
 import java.nio.file.{Files, StandardOpenOption}
-import scala.concurrent.ExecutionContext.Implicits.global
 
 trait PostgresDB {
-
-  implicit val cs: ContextShift[IO] = IO.contextShift(global)
-  implicit val timer: Timer[IO]     = IO.timer(global)
 
   protected lazy val tx: Transactor[IO] = {
     println(s""">>> schemaName: $schemaName""")
@@ -96,7 +93,8 @@ trait PostgresDB {
         driver = "org.postgresql.Driver",
         url = jdbcUrl,
         user = username,
-        pass = password
+        password = password,
+        logHandler = None
       )
     }
 

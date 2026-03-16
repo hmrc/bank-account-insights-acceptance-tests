@@ -34,6 +34,10 @@ case class TokenInfo(
 )
 
 object TokenInfo {
+
+  def unapply(t: TokenInfo): Option[(TokenId, Token, String, Instant, Instant, Option[Instant], TokenType)] =
+    Some((t.tokenId, t.token, t.principal, t.expiresAt, t.createdAt, t.lastUsedAt, t.tokenType))
+
   val mongoFormat: OFormat[TokenInfo] = {
     implicit val instf: Format[Instant] = MongoJavatimeFormats.instantFormat
     implicit val tif: Format[ObjectId]  = MongoFormats.objectIdFormat
