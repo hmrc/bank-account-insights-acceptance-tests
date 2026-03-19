@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.test.api.client
 
-import play.api.libs.json.{Json, Writes}
+import play.api.libs.json.Json
 import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import play.api.libs.ws.StandaloneWSResponse
 import uk.gov.hmrc.apitestrunner.http.HttpClient

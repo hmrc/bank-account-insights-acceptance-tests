@@ -41,7 +41,7 @@ object DBHelper {
   def update(fileName: File, schemaName: String)(implicit tx: Transactor[IO]): IO[doobie.Transactor[IO]] =
     for {
       sql <- readResource(fileName).use(f => IO(f.mkString.replaceAll(schemaNamePlaceHolder, schemaName)))
-      n   <- const(sql).update.run.transact(tx)
+      _   <- const(sql).update.run.transact(tx)
     } yield tx
 
   def update(s: String)(implicit tx: Transactor[IO]): IO[Int] =

@@ -17,14 +17,11 @@
 package uk.gov.hmrc.test.api.service
 
 import play.api.libs.json.Json
-import play.api.libs.ws.{StandaloneWSRequest, StandaloneWSResponse}
+import play.api.libs.ws.StandaloneWSResponse
 import uk.gov.hmrc.test.api.client.HttpClientHelper
 import uk.gov.hmrc.test.api.conf.TestConfiguration
 import uk.gov.hmrc.test.api.helpers.Endpoints
 import uk.gov.hmrc.test.api.models.TestOnlyAddTokenRequest
-
-import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
 
 class InternalAuthService extends HttpClientHelper {
 

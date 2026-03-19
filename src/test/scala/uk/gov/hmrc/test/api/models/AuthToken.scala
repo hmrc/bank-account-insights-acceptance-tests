@@ -24,6 +24,9 @@ import java.time.Instant
 case class AuthToken(token: Token, expiresAt: Instant)
 
 object AuthToken {
+
+  def unapply(a: AuthToken): Option[(Token, Instant)] = Some((a.token, a.expiresAt))
+
   val format: OFormat[AuthToken] =
     ((__ \ "token").format[String].inmap[Token](Token.apply, _.value)
       ~ (__ \ "expiresAt").format[String].inmap[Instant](Instant.parse, _.toString))(

@@ -25,14 +25,12 @@ import io.swagger.v3.parser.core.models.ParseOptions
 import org.openapi4j.schema.validator.ValidationData
 import org.openapi4j.schema.validator.v3.SchemaValidator
 import org.scalatest.AppendedClues.convertToClueful
-import org.scalatest.matchers.should.Matchers._
+import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import uk.gov.hmrc.test.api.client.HttpClientHelper
 import uk.gov.hmrc.test.api.conf.TestConfiguration
 
-import scala.concurrent.Await
-import scala.concurrent.duration.DurationInt
-import scala.jdk.StreamConverters._
+import scala.jdk.StreamConverters.*
 
 class SwaggerSpecs extends AnyWordSpec with SwaggerSpec {
   val gatewayHost: String = TestConfiguration.url("bank-account-gateway")
@@ -57,7 +55,7 @@ trait SwaggerSpec {
   parseOptions.setResolveFully(true)
 
   val mapper = new ObjectMapper()
-  mapper.setSerializationInclusion(Include.NON_NULL);
+  mapper.setDefaultPropertyInclusion(Include.NON_NULL)
 
   val applicationJson = "application/json"
   val client          = new HttpClientHelper() {}

@@ -18,7 +18,7 @@ package uk.gov.hmrc.test.api.models
 
 import play.api.libs.json.{Format, JsResult, JsString, JsValue}
 
-case class ResourceLocation private[models] (value: String) extends AnyVal
+case class ResourceLocation(value: String) extends AnyVal
 
 object ResourceLocation {
   val wildcard: ResourceLocation = ResourceLocation("*")

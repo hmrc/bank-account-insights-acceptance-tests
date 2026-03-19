@@ -49,6 +49,10 @@ case class Resource(resourceType: ResourceType, resourceLocation: ResourceLocati
 }
 
 object Resource {
+
+  def unapply(r: Resource): Option[(ResourceType, ResourceLocation)] =
+    Some((r.resourceType, r.resourceLocation))
+
   val format: OFormat[Resource] =
     ((__ \ "resourceType").format[ResourceType](ResourceType.format)
       ~ (__ \ "resourceLocation")

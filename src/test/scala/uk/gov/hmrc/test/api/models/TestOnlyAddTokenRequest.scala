@@ -22,6 +22,10 @@ import play.api.libs.json.{Format, OFormat, __}
 case class TestOnlyAddTokenRequest(token: Option[Token], principal: String, permissions: Set[Permission])
 
 object TestOnlyAddTokenRequest {
+
+  def unapply(t: TestOnlyAddTokenRequest): Option[(Option[Token], String, Set[Permission])] =
+    Some((t.token, t.principal, t.permissions))
+
   val format: OFormat[TestOnlyAddTokenRequest] = {
     implicit val pf: Format[Permission] = Permission.format
     ((__ \ "token").formatNullable[String].inmap[Option[Token]](_.map(Token.apply), _.map(_.value))

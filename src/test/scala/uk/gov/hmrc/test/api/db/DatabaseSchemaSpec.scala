@@ -20,6 +20,7 @@ import doobie.implicits._
 import doobie.util.fragment.Fragment.{const => csql}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
+import cats.effect.unsafe.implicits.global
 
 class DatabaseSchemaSpec extends AnyWordSpec with PostgresDB with Matchers {
   "PG Test" when {
